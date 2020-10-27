@@ -27,7 +27,7 @@ function drawCircles(jsonData) {
     // Note, 3rd coordinate from geoJSON denotes depth
     onEachFeature: function (feature, layer) {
       layer.bindPopup(
-        "<h3>" + "Magnitude: " + feature.properties.mag + " Depth: " + feature.geometry.coordinates.slice(2,3) + " km" + "</h3><hr>" + 
+        "<h3>" + "Magnitude: " + feature.properties.mag + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Depth: " + feature.geometry.coordinates.slice(2,3) + " km" + "</h3><hr>" + 
         "<p>" + "Location: " + feature.properties.place + "</p>" +
         "<p>" + new Date(feature.properties.time) + "</p>" 
       );
@@ -60,10 +60,10 @@ function drawMaps(earthquakes) {
 
   // Define dark layer
   var darkMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-      attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-      maxZoom: 18,
-      id: "dark-v10",
-      accessToken: API_KEY
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "dark-v10",
+    accessToken: API_KEY
   });
 
   // Define a baseMaps object to hold all map layers
