@@ -38,6 +38,7 @@ var darkMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z
 
 // Define a baseMaps object to hold layers
 var baseMaps = {
+  "Satellite Map": satelliteMap,
   "Street Map": streetMap,
   "Dark Map": darkMap
 };
