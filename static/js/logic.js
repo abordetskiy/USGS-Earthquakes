@@ -18,6 +18,7 @@ function drawCircles(jsonData) {
         weight: 1,
         fillOpacity: 0.75,
         color: "black",
+
         fillColor: "orange",
         radius: feature.properties.mag * 25000
       })
@@ -25,7 +26,8 @@ function drawCircles(jsonData) {
     // Give each feature a popup describing the location, magnitude, depth, and time of the earthquake
     // Note, 3rd coordinate from geoJSON denotes depth
     onEachFeature: function (feature, layer) {
-      layer.bindPopup("<h3>" + "Magnitude: " + feature.properties.mag + " Depth: " + feature.geometry.coordinates.slice(2,3) + " km" + "</h3><hr>" + 
+      layer.bindPopup(
+        "<h3>" + "Magnitude: " + feature.properties.mag + " Depth: " + feature.geometry.coordinates.slice(2,3) + " km" + "</h3><hr>" + 
         "<p>" + "Location: " + feature.properties.place + "</p>" +
         "<p>" + new Date(feature.properties.time) + "</p>" 
       );
