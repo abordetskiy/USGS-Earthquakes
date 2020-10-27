@@ -1,3 +1,14 @@
+// URL endpoint
+var endpoint_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02&maxlongitude=-69.52148437&minlongitude=-123.83789062&maxlatitude=48.74894534&minlatitude=25.16517337";
+
+// Pull data from URL
+d3.json(endpoint_URL, function(data) {
+// Print to console to verify data
+for (var i = 0; i < data.features.length; i++) {
+console.log(data.features);
+}
+});
+
 
 // Define satellite layer
 var satelliteMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
