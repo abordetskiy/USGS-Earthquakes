@@ -1,14 +1,34 @@
 // URL endpoint
 var endpoint_URL = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02&maxlongitude=-69.52148437&minlongitude=-123.83789062&maxlatitude=48.74894534&minlatitude=25.16517337";
 
-// Pull data from URL
+
+// Pull data from URL and pass features object to drawCircles() function
 d3.json(endpoint_URL, function(data) {
-// Print to console to verify data
-for (var i = 0; i < data.features.length; i++) {
-console.log(data.features);
-}
+  drawCircles(data.features);
 });
 
+// Create function to draw circles based on URL/JSON data
+function drawCircles(jsonData) {
+
+// Create geoJSON object from passed URL/JSON data
+var earthquakes = L.geoJSON(jsonData, {
+  // Pull in coordinates and draw circle based on latitude and longitude with radius based on magnitude
+  pointToLayer: function (feature, latlng) {
+  return L.circle(latlng, {
+  stroke: true,
+  weight: 1,
+  fillOpacity: 0.75,
+  color: "black",
+  fillColor: "orange",
+  radius: feature.properties.mag * 25000})}
+})
+
+// Pass earthquake layer to drawMaps() function once built
+drawMaps(earthquakes)
+}
+
+// Create function to pull in and draw all maps based on earthquake layer
+function drawMaps(earthquakes) {
 
 // Define satellite layer
 var satelliteMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -36,27 +56,29 @@ var darkMap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z
     accessToken: API_KEY
   });
 
-// Define a baseMaps object to hold layers
+// Define a baseMaps object to hold all map layers
 var baseMaps = {
   "Satellite Map": satelliteMap,
   "Street Map": streetMap,
   "Dark Map": darkMap
 };
 
-  // Create overlay object
-  var overlayMaps = {
-  };
+// Create overlay object & pass in earthquake layer
+var overlayMaps = {
+  "Earthquakes": earthquakes
+};
 
-// Establish Map variable in 'map' tag in index.html
+// Establish Map variable in 'map' tag in index.html & set default layers
 var myMap = L.map("map", {
   center: [
     39.8283, -98.5795
   ],
   zoom: 4,
-  layers: satelliteMap
+  layers: [satelliteMap, earthquakes]
 });
 
-  // Create a layer control & add to map
+  // Create a layer control & add all layers to map
   L.control.layers(baseMaps, overlayMaps, {
     collapsed: false
   }).addTo(myMap);
+}
