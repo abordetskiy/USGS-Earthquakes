@@ -3,15 +3,13 @@ body {
   margin: 0;
 }
 
-
 #map,
 body,
 html {
   height: 100%;
 }
 
-
-/* CSS from the Leaflet-Choropleth documentation */
+/* CSS from the Leaflet-Choropleth documentation for legend */
 .legend {
   padding: 6px 8px;
   font: 14px Arial, Helvetica, sans-serif;

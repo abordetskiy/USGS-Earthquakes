@@ -1,20 +1,25 @@
 // URL endpoint - Global earthquakes for past 30 days above 1 Magnitutde
-var endpoint_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson"
-// Pull data from URL and pass features object to drawCircles() function
-d3.json(endpoint_URL, function(data) {
-  drawCircles(data.features);
+var earthquakes_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson"
+// URL endpoint - Global tectonic plate boundaries
+var plate_URL = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json"
+
+// Pull data from URLs and pass features objects to drawGeoJSON() function
+d3.json(earthquakes_URL, function(earthquakedata) {
+  d3.json(plate_URL, function(platedata) {
+    drawGeoJSON(earthquakedata.features, platedata.features);
+  });
 });
 
-// Create function to draw circles based on URL/JSON data
-function drawCircles(jsonData) {
+// Create function to draw circles & plates based on URL/JSON data
+function drawGeoJSON(earthquakeJsonData, platesJsonData) {
 
-  // Create geoJSON object from passed URL/JSON data
+  // Create geoJSON object from passed earthquake JSON data
   // Note, 3rd coordinate from geoJSON denotes depth
-  var earthquakes = L.geoJSON(jsonData, {
-    // Pull in coordinates and draw circle based on latitude and longitude with radius based on magnitude
+  var earthquakes = L.geoJSON(earthquakeJsonData, {
+    // Pull in coordinates and draw circle based on latitude/longitude with radius based on magnitude
     pointToLayer: function (feature, latlng) {
 
-      // Establish empty color variable
+      // Initialize color variable
       var circleColor = ""
       // Test depth to get appropriate color
       if (feature.geometry.coordinates.slice(2,3) <= 20) {
@@ -33,7 +38,7 @@ function drawCircles(jsonData) {
         circleColor = "white";
       }
       
-      // draw circle based on properties
+      // Draw circles based on properties
       return L.circle(latlng, {
         stroke: true,
         weight: 1,
@@ -52,12 +57,21 @@ function drawCircles(jsonData) {
       );
     }
   })
-  // Pass earthquake layer to drawMaps() function once built
-  drawMaps(earthquakes)
+  // Create geoJSON object from passed plates JSON data
+  var plates = L.geoJSON(platesJsonData, {
+    style: function (feature) {
+      return {
+        color: "white",
+        weight: 1
+      };
+    }
+  })
+  // Pass earthquake & plates layer to drawMaps() function once built
+  drawMaps(earthquakes, plates)
 }
 
-// Create function to pull in and draw all maps based on earthquake layer
-function drawMaps(earthquakes) {
+// Create function to pull in and draw all maps based on earthquake & plates layers
+function drawMaps(earthquakes, plates) {
 
   // Define satellite layer
   var satelliteMap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
@@ -92,17 +106,17 @@ function drawMaps(earthquakes) {
     "Dark Map": darkMap
   };
 
-  // Create overlay object & pass in earthquake layer
+  // Create overlay objects and pass in earthquake & plates layers
   var overlayMaps = {
-    "Earthquakes": earthquakes
-    
+    "Earthquakes": earthquakes,
+    "Tectonic Plates": plates
   };
 
   // Establish Map variable in 'map' tag in index.html & set default layers
   var myMap = L.map("map", {
     center: [40.4637, -3.7492],
     zoom: 2,
-    layers: [satelliteMap, earthquakes]
+    layers: [satelliteMap, earthquakes, plates]
   });
 
   // Set up the legend
@@ -111,7 +125,7 @@ function drawMaps(earthquakes) {
     // Create div tag to hold legend
     var div = L.DomUtil.create("div", "info legend");
     // Establish parameters for legend
-    var limits = [0,10,30,50,70,90];
+    var limits = [0,20,40,60,80,100];
     var colors = ["lightgreen","yellowgreen","yellow","orange","orangered","red"];
     var labels = ["0-20 km","21-40 km","41-60 km","61-80 km","81-100 km","100+ km"];
     // Add header to legend
