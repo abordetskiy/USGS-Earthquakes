@@ -1,4 +1,4 @@
-// URL endpoint
+// URL endpoint - Global earthquakes for past 30 days above 1 Magnitutde
 var endpoint_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson"
 // Pull data from URL and pass features object to drawCircles() function
 d3.json(endpoint_URL, function(data) {
@@ -17,17 +17,17 @@ function drawCircles(jsonData) {
       // Establish empty color variable
       var circleColor = ""
       // Test depth to get appropriate color
-      if (feature.geometry.coordinates.slice(2,3) <= 10) {
+      if (feature.geometry.coordinates.slice(2,3) <= 20) {
         circleColor = "lightgreen";
-      } else if (feature.geometry.coordinates.slice(2,3) <= 30) {
+      } else if (feature.geometry.coordinates.slice(2,3) <= 40) {
         circleColor = "yellowgreen";
-      } else if (feature.geometry.coordinates.slice(2,3) <= 50) {
+      } else if (feature.geometry.coordinates.slice(2,3) <= 60) {
         circleColor = "yellow";
-      } else if (feature.geometry.coordinates.slice(2,3) <= 70) {
+      } else if (feature.geometry.coordinates.slice(2,3) <= 80) {
         circleColor = "orange";
-      } else if (feature.geometry.coordinates.slice(2,3) <= 90) {
+      } else if (feature.geometry.coordinates.slice(2,3) <= 100) {
         circleColor = "orangered";
-      } else if (feature.geometry.coordinates.slice(2,3) > 90) {
+      } else if (feature.geometry.coordinates.slice(2,3) > 100) {
         circleColor = "red";
       } else {
         circleColor = "white";
@@ -95,17 +95,45 @@ function drawMaps(earthquakes) {
   // Create overlay object & pass in earthquake layer
   var overlayMaps = {
     "Earthquakes": earthquakes
+    
   };
 
   // Establish Map variable in 'map' tag in index.html & set default layers
   var myMap = L.map("map", {
-    center: [39.8283, -98.5795],
+    center: [40.4637, -3.7492],
     zoom: 2,
     layers: [satelliteMap, earthquakes]
   });
 
-    // Create a layer control & add all layers to map
-    L.control.layers(baseMaps, overlayMaps, {
-      collapsed: false
+  // Set up the legend
+  var legend = L.control({ position: "bottomleft" });
+  legend.onAdd = function() {
+    // Create div tag to hold legend
+    var div = L.DomUtil.create("div", "info legend");
+    // Establish parameters for legend
+    var limits = [0,10,30,50,70,90];
+    var colors = ["lightgreen","yellowgreen","yellow","orange","orangered","red"];
+    var labels = ["0-20 km","21-40 km","41-60 km","61-80 km","81-100 km","100+ km"];
+    // Add header to legend
+    div.innerHTML = "<h1>Earthquake Depth:</h1>";
+    // Loop through limits and draw colored boxes
+    limits.forEach(function(limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\">" + labels[index] + "</li>");
+    });
+  
+    // Slice labels list to only include the li tag portion
+    labels = labels.slice(6,12)
+    // Remove commas for clean look
+    div.innerHTML += labels.join("");
+    return div;
+  };
+
+  // Add legend to the map
+  legend.addTo(myMap);
+
+  // Create a layer control & add all layers to map
+  L.control.layers(baseMaps, overlayMaps, {
+    collapsed: false
     }).addTo(myMap);
+  
 }
