@@ -2,7 +2,7 @@
 
 ### This project plots global earthquakes over the last 30 days. All earthquake data was pulled from the United States Geological Survey Earthquake site. (Depending on current earthquake data, this script may take some time to run so please be patient as it loads).
 
-#### The magnitude of earthquakes is represented by the size of the circle and the depth of earthquakes is representd by the color of the circle (reference the legend for color divisions). The default map layer is satelite, but street and darkmap radio options are available as well. Click on any circle to get drill-down data including Magnitude, Depth, Location, and Time.
+#### The magnitude of earthquakes is represented by the size of the circle and the depth of earthquakes is representd by the color of the circle (reference the legend for color divisions). The default map layer is satellite, but street and darkmap radio options are available as well. Click on any circle to get drill-down data including Magnitude, Depth, Location, and Time.
 
 #### Tectonic plates boundaries are also included from geoJSON files parsed by Hugo Ahlenius (https://github.com/fraxen/tectonicplates) to show where plates connect/overlap. Both the Earthquakes and Tectonic Plates layers can be toggled on and off.
 
