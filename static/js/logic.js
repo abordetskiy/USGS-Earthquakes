@@ -9,22 +9,42 @@ d3.json(endpoint_URL, function(data) {
 // Create function to draw circles based on URL/JSON data
 function drawCircles(jsonData) {
 
-// Create geoJSON object from passed URL/JSON data
+  // Create geoJSON object from passed URL/JSON data
+  // Note, 3rd coordinate from geoJSON denotes depth
   var earthquakes = L.geoJSON(jsonData, {
     // Pull in coordinates and draw circle based on latitude and longitude with radius based on magnitude
     pointToLayer: function (feature, latlng) {
+
+      // Establish empty color variable
+      var circleColor = ""
+      // Test depth to get appropriate color
+      if (feature.geometry.coordinates.slice(2,3) <= 10) {
+        circleColor = "lightgreen";
+      } else if (feature.geometry.coordinates.slice(2,3) <= 20) {
+        circleColor = "yellowgreen";
+      } else if (feature.geometry.coordinates.slice(2,3) <= 30) {
+        circleColor = "yellow";
+      } else if (feature.geometry.coordinates.slice(2,3) <= 40) {
+        circleColor = "orange";
+      } else if (feature.geometry.coordinates.slice(2,3) <= 50) {
+        circleColor = "orangered";
+      } else if (feature.geometry.coordinates.slice(2,3) > 60) {
+        circleColor = "red";
+      } else {
+        circleColor = "white";
+      }
+      
+      // draw circle based on properties
       return L.circle(latlng, {
         stroke: true,
         weight: 1,
         fillOpacity: 0.75,
         color: "black",
-
-        fillColor: "orange",
+        fillColor: circleColor,
         radius: feature.properties.mag * 25000
       })
     },
     // Give each feature a popup describing the location, magnitude, depth, and time of the earthquake
-    // Note, 3rd coordinate from geoJSON denotes depth
     onEachFeature: function (feature, layer) {
       layer.bindPopup(
         "<h3>" + "Magnitude: " + feature.properties.mag + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Depth: " + feature.geometry.coordinates.slice(2,3) + " km" + "</h3><hr>" + 
