@@ -1,3 +1,4 @@
+var API_KEY = prompt("Please enter a valid mapbox API key", "API_KEY Here")
 // URL endpoint - Global earthquakes for past 30 days above 1 Magnitutde
 var earthquakes_URL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson"
 // URL endpoint - Global tectonic plate boundaries
