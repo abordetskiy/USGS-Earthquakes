@@ -7,7 +7,7 @@
 #### Tectonic plates boundaries are also included from geoJSON files parsed by Hugo Ahlenius (https://github.com/fraxen/tectonicplates) to show where plates connect/overlap. Both the Earthquakes and Tectonic Plates layers can be toggled on and off.
 
 
-##### There are two ways to run the code, easiest of which is to run index.html directly in Google Chrome or Mozilla Firefox. A dialog will pop up asking for a mapbox API key, which is required to implement the map layers. 
+##### There are two ways to run the code, easiest of which is to run index.html directly in Google Chrome or Mozilla Firefox. A dialog will pop up asking for a mapbox API key, which is required to implement the map layers. You may also use this Github Pages link to access the webpage in a similar manner: https://abordetskiy.github.io/USGS-Earthquakes/
 
 ##### index.html includes commented code to pull the API_KEY directly from static/js/config.js (which is removed via .gitignore). In order to run the code via this option, line two in logic.js must be removed/commented and line 31 in index.html must be un-commented and a config.js file must be created in static/js. config.js must include the following code:     API_KEY = "your_api_key_here"
 
